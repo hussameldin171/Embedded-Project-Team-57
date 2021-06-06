@@ -146,6 +146,30 @@ void show_distance(double distance) //a function that displays the total distanc
 		display(d) ;
 }
 
+//Two functions that return the latitude and longitude for a certain reading and shall be defined later 
+double get_lat(); 
+double get_long();
+
+
+//A function that returns the total distance if it exceeds 100m or when the push button at PF0 is pressed
+double total_distance(){
+	double distance = 0.0;
+	double old_lat = get_lat();
+	double old_long = get_long();
+	
+	double new_lat , new_long ;
+	
+	while ( (distance <= 100.0) && ( (GPIO_PORTF_DATA_R & 0x01) == 0x01) )
+	{
+	  new_lat =  get_lat();
+		new_long = get_long();
+		distance += hav(old_lat,new_lat,old_long, new_long);
+		old_lat = new_lat;
+		old_long = new_long ;
+	}
+	return distance ;
+
+}
 
 
 
