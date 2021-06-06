@@ -123,3 +123,34 @@ while( (SYSCTL_PRGPIO_R & 0x03) == 0 ) {}
 
 }
 //Note : first line and second line lcd commands will be used in the main function
+
+void display(char word[] ) //a function that takes a string paramter and displays it on the lcd
+	{
+
+    int k   = strlen(word);
+    int i = 0;
+    for (i =0 ; i <k; i++)
+    {
+        lcd_data(word[i]);
+        milli_delay(100);
+    }
+}
+
+void show_distance(double distance) //a function that displays the total distance on lcd
+	{
+		lcd_cmd(0x80);
+	  char d[10]; //maximum size of the number
+    sprintf(d, "%g", distance);
+		display("Distance = ") ;
+		lcd_cmd(0XC0);
+		display(d) ;
+}
+
+
+
+
+
+
+
+
+
