@@ -7,6 +7,40 @@
 void SystemInit(){}
 	
 
+void Init_Port_F (){
+	
+	SYSCTL_RCGCGPIO_R |= 0x20;
+	while((SYSCTL_PRGPIO_R & 0x20 ) == 0 ){}
+	
+		// PORT F initializing led at PF3 and switch at PF0
+	GPIO_PORTF_LOCK_R = 0x4C4F434B;
+	GPIO_PORTF_CR_R = 0x09; 
+	GPIO_PORTF_AFSEL_R &= ~(0x09);
+	GPIO_PORTF_AMSEL_R &= ~(0x09);
+	GPIO_PORTF_PCTL_R =0;
+		GPIO_PORTF_DEN_R |= 0x09; 
+	GPIO_PORTF_DIR_R |= 0x08; // led at PF3 is output
+	GPIO_PORTF_DIR_R &= 0xFE; // Switch at PF0 is input
+	GPIO_PORTF_PUR_R |= 0x01; //pull up resistance for push button
+		
+	}
+
+	
+void led_on(double distance) //led is turned on when the distance exceeds 100m
+	{
+	if (distance >= 100) 
+		GPIO_PORTF_DATA_R |= 0x08 ;
+}
+
+
+
+
+
+
+
+
+
+
 void UART_INT() {         
 	// Initializing UART2 in PORT D 
 	//PD6 --> Rx
@@ -37,17 +71,6 @@ unsigned char read() {
 	while(!ready()) {}
 	return (unsigned char)(UART2_DR_R & 0xFF) ;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -175,8 +198,6 @@ double hav(double lat1, double lat2, double lon1, double lon2){  //lat1&2 and lo
 
 
 
-
-
 //Two functions that return the latitude and longitude for a certain reading and shall be defined later 
 double get_lat(); 
 double get_long();
@@ -201,11 +222,6 @@ double total_distance(){
 	return distance ;
 
 }
-
-
-
-
-
 
 
 
