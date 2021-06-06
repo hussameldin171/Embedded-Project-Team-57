@@ -6,7 +6,7 @@
 void SystemInit(){}
 	
 
-void UART_INT() {
+void UART_INT() {         
 	// Initializing UART2 in PORT D 
 	//PD6 --> Rx
 	//PD7 --> Tx
@@ -89,7 +89,7 @@ milli_delay(10) ;
 }
 
 
-void lcd_init() {
+void lcd_init() {    // lcd intialiazation function
 	
 SYSCTL_RCGCGPIO_R |= 0x03 ; // Initialize all clocks for ports A,B 
 while( (SYSCTL_PRGPIO_R & 0x03) == 0 ) {}
