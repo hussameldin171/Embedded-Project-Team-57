@@ -5,9 +5,9 @@
 #define r 6371*1000
 
 void SystemInit(){}
-	
-
-void Init_Port_F (){
+/* ***************************************************************** Tarek Yahya ************************************************************************************************/
+//Port f initializiation
+void Init_Port_F(){
 	
 	SYSCTL_RCGCGPIO_R |= 0x20;
 	while((SYSCTL_PRGPIO_R & 0x20 ) == 0 ){}
@@ -24,7 +24,6 @@ void Init_Port_F (){
 	GPIO_PORTF_PUR_R |= 0x01; //pull up resistance for push button
 		
 	}
-
 	
 void led_on(double distance) //led is turned on when the distance exceeds 100m
 	{
@@ -32,15 +31,8 @@ void led_on(double distance) //led is turned on when the distance exceeds 100m
 		GPIO_PORTF_DATA_R |= 0x08 ;
 }
 
-
-
-
-
-
-
-
-
-
+/*******************************************************************************************************************************************************************************/
+/***********************************************************************Hisham Yakan*******************************************************************************************/
 void UART_INT() {         
 	// Initializing UART2 in PORT D 
 	//PD6 --> Rx
@@ -56,7 +48,7 @@ void UART_INT() {
 	UART2_LCRH_R = 0x70 ; //fifo enabled, 8 bit word length , one stop bit , no  parity check
 	UART2_CTL_R  |= 0x0201; //Enable = 1 , RXE = 1 , Receive only 
 		
-	GPIO_PORTD_AMSEL_R  &= ~0xC0 ;
+	GPIO_PORTD_AMSEL_R  &= ~(0xC0) ;
 	GPIO_PORTD_DEN_R |= 0xC0 ;
 	GPIO_PORTD_AFSEL_R |= 0xC0 ;
 	GPIO_PORTD_PCTL_R = 0x11000000 ;
@@ -64,23 +56,20 @@ void UART_INT() {
 
 
 uint8_t ready() {
+	//checks RXFE
 	return ((UART2_FR_R & 0x10) == 0x10) ? 0 : 1;
 }
 
 unsigned char read() {
+	//Reading from UART
 	while(!ready()) {}
 	return (unsigned char)(UART2_DR_R & 0xFF) ;
 }
+/*******************************************************************************************************************************************************************************/
+/******************************************************************Hussam Eldin Wael********************************************************************************************/
 
-
-
-
-
-
-
-
-
-void milli_delay(int n) //software delay
+//software delay
+void milli_delay(int n) 
 	{
     int i , j ;
 for( i=0;i<n;i++) {
@@ -148,7 +137,20 @@ while( (SYSCTL_PRGPIO_R & 0x03) == 0 ) {}
 }
 //Note : first line and second line lcd commands will be used in the main function
 
-void display(char word[] ) //a function that takes a string paramter and displays it on the lcd
+/*******************************************************************************************************************************************************************************/
+/******************************************************************Hossam Abdallah********************************************************************************************/
+
+//final initializing function
+void final_init() {
+	Init_Port_F();
+	UART_INT();
+	lcd_init();
+}
+
+
+
+//a function that takes a string paramter and displays it on the lcd
+void display(char word[] ) 
 	{
 
     int k   = strlen(word);
@@ -159,8 +161,8 @@ void display(char word[] ) //a function that takes a string paramter and display
         milli_delay(100);
     }
 }
-
-void show_distance(double distance) //a function that displays the total distance on lcd
+ //a function that displays the total distance on lcd
+void show_distance(double distance)
 	{
 		lcd_cmd(0x80);
 	  char d[10]; //maximum size of the number
@@ -171,9 +173,8 @@ void show_distance(double distance) //a function that displays the total distanc
 }
 
 
-
-
-
+/*******************************************************************************************************************************************************************************/
+/******************************************************************Hassan Essam************************************************************************************************/
 
 
 
@@ -195,7 +196,8 @@ double hav(double lat1, double lat2, double lon1, double lon2){  //lat1&2 and lo
 	return(d);
 };
 
-
+/*******************************************************************************************************************************************************************************/
+/******************************************************************Hazem Ramadan************************************************************************************************/
 
 
 //Two functions that return the latitude and longitude for a certain reading and shall be defined later 
@@ -222,6 +224,7 @@ double total_distance(){
 	return distance ;
 
 }
+/*******************************************************************************************************************************************************************************/
 
 
 
