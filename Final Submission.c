@@ -205,6 +205,98 @@ void distance_display(int x){ //displays the distance on lcd as integer
 
 
 
+void getData() //Parses data and stores the latitude and longitude as strings in global variables
+{
+
+    int check = 0; //to check if the gppga tag is reached, otherwise starts again
+    int i ; //for a loop
+    char lat[12] , lon[13] ; //to store latitude and longitude strings
+  unsigned char temp = 0 ; //to read characters from UART
+  int index = 0 ;
+  start:
+    temp = read() ;
+    if (temp == '$') {
+            temp = read() ;
+            if (temp == 'G') {
+                    temp = read() ;
+                    if (temp == 'P') {
+                            temp = read() ;
+                            if (temp == 'G') {
+                                    temp = read() ;
+                                    if (temp == 'G') {
+                                            temp = read() ;
+                                          if (temp == 'A') {
+                                                    check = 1 ; //GPPGA tag reached
+
+                                                    temp = read();
+
+                                                    temp = ' ';
+                                                    while(temp != ',') //skip until next comma
+                                                        {
+
+                                                        temp = read() ;
+
+                                                    }
+                                                        //we reached the other comma, now we'll parse the latitude string
+                                                    temp = read();
+                                                    while(temp != ',') {
+                                                        lat[index] = temp ;
+
+                                                        temp = read();
+                                                        index++;
+
+
+                                                    }
+
+
+
+
+                                                    index = 0 ;
+                                                    temp =  ' ' ;
+                                                    while(temp != ',') {temp = read();} //skip North or South
+
+                                                    temp = read();
+                                                    //Now parsing longitude string
+                                                    while(temp != ',') {
+                                                        lon[index] = temp ;
+
+                                                        temp = read();
+                                                        index++;
+                                                    }
+
+                                                    //storing parsed data in global variables
+                                                    strcpy(latitude , lat);
+                                                    strcpy(longitude, lon);
+
+                                                }
+
+
+                                    }
+                                        }
+
+    }
+}
+
+
+
+}
+if (check == 0) {goto start;} //if it'snot the gppga tag, it restarts its operation until it reaches the desired tag
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
