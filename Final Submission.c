@@ -116,6 +116,61 @@ void led_on(double distance) //led is turned on when the distance exceeds 100m
 
 
 
+/****** LCD ********/
+
+
+//PA7 -- > RS
+//PA5 -- > RW
+//PA6 -- > E
+//PBn --> Dn
+void lcd_cmd(unsigned char cmd) { //send a command to lcd
+
+GPIO_PORTA_DATA_R &= ~(0xE0) ; // disable RS , Enable , RW
+GPIO_PORTB_DATA_R = cmd ;
+GPIO_PORTA_DATA_R |= 0x40 ; // Enable on
+milli_delay(10) ;
+GPIO_PORTA_DATA_R &= ~(0xE0) ; // Enable off
+milli_delay(10) ;
+
+
+}
+
+void lcd_data(unsigned char data) { //write a character on lcd
+GPIO_PORTA_DATA_R |= 0x80  ; //Enable RS
+GPIO_PORTA_DATA_R &= ~(0x60); // disable Enable , RW
+GPIO_PORTB_DATA_R = data;
+GPIO_PORTA_DATA_R |= 0x40; // Enable on
+milli_delay(10) ;
+GPIO_PORTA_DATA_R &= ~(0x60) ; // Enable off
+milli_delay(10) ;
+}
+
+
+void lcd_init() {
+SYSCTL_RCGCGPIO_R |= 0x2B ; // Initialize all clocks for ports A,B,D, and F
+while( (SYSCTL_PRGPIO_R & 0x2B) == 0 ) {}
+
+    //GPIO_PORTB_LOCK_R = 0x4C4F434B;
+    //GPIO_PORTB_CR_R = 0xFF;
+
+    GPIO_PORTA_DEN_R |= 0xE0 ;
+    GPIO_PORTB_DEN_R |= 0xFF ;
+
+    GPIO_PORTA_DIR_R |= 0xE0 ;
+    GPIO_PORTB_DIR_R |= 0xFF ;
+
+    GPIO_PORTA_AMSEL_R &= ~(0xE0) ;
+    GPIO_PORTB_AMSEL_R &= ~(0xFF) ;
+
+    GPIO_PORTA_AFSEL_R &= ~(0xE0) ;
+    GPIO_PORTB_AFSEL_R &= ~(0xFF) ;
+
+    GPIO_PORTA_PCTL_R &= 0x000FFFFF ;
+    GPIO_PORTB_PCTL_R  = 0 ;
+
+}
+
+
 
 
 
