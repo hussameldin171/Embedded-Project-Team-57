@@ -287,6 +287,30 @@ if (check == 0) {goto start;} //if it'snot the gppga tag, it restarts its operat
 
 
 
+/*******Distance Calculation******/
+
+
+
+
+//haversine rule for calculating the total distance between two points given their latitudes and longitudes
+
+double hav(double lat1, double lat2, double lon1, double lon2){  //lat1&2 and lon1&2 are in radian
+    double d,h,sin_latdiff,sin_londiff,cos_lat1,cos_lat2,sin_latdiff_sq,sin_londiff_sq ;
+    //degree to rad conversion first
+    lat1*= pi/180 ; lat2*= pi/180 ; lon1*= pi/180 ; lon2*= pi/180 ;
+
+    sin_latdiff             = sin((lat2-lat1)/2);
+    sin_londiff             = sin((lon2-lon1)/2);
+    cos_lat1                    = cos(lat1);
+    cos_lat2                    = cos(lat2);
+    sin_latdiff_sq      = sin_latdiff*sin_latdiff;
+    sin_londiff_sq      = sin_londiff*sin_londiff;
+
+    h  = sin_latdiff_sq + cos_lat1*cos_lat2*sin_londiff_sq;
+
+    d = 2*r*asin(sqrt(h));
+    return(d);
+}
 
 
 
