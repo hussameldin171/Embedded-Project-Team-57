@@ -172,6 +172,43 @@ while( (SYSCTL_PRGPIO_R & 0x2B) == 0 ) {}
 
 
 
+void display(char word[] ){
+
+    int k   = strlen(word);
+    int i = 0;
+    for (i =0 ; i <k; i++)
+    {
+        lcd_data(word[i]);
+        milli_delay(100);
+    }
+}
+
+void distance_display(int x){ //displays the distance on lcd as integer
+
+    char init[10] , final[10];
+    int i = 0 ;
+    while(x>0) {
+        init[i++] = x%10 +'0' ;
+        x/=10 ;
+        if(i == 10){break;}
+    }
+    int length = strlen(init);
+        for(i = 0 ; i < strlen(init) ; i++){
+            final[length-i-1] = init[i] ;
+        }
+
+    display(final) ;
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 
