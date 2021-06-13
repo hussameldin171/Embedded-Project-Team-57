@@ -315,7 +315,36 @@ double hav(double lat1, double lat2, double lon1, double lon2){  //lat1&2 and lo
     return(d);
 }   
 
+//A function that returns the total distance if it exceeds 100m or when the push button at PF0 is pressed
+double total_distance(){
+    double distance = 0.0;
+    getData() ; //Data is parsed and latitude and longitudes parsed strings and stored in global variables
 
+    double old_lat = get_lat(latitude) ;
+    double old_lon = get_lon(longitude);
+
+
+    double new_lat , new_lon ;
+
+   while ( (distance <= 100.0) ) //loop with condition that distance exceeds 100
+   {
+       lcd_cmd(0X01);
+      getData() ;
+      new_lat = get_lat(latitude) ;
+        new_lon = get_lon(longitude);
+
+        distance += hav(old_lat,new_lat,old_lon, new_lon);
+        old_lat = new_lat;
+        old_lon = new_lon ;
+        distance_display(distance); //print distance constantly
+        milli_delay(2000) ;
+
+    }
+    led_on(distance) ; //turn on led after exceeding 100m
+
+    return distance ;
+
+}
 
 
 
