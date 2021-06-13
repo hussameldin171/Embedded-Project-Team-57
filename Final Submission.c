@@ -345,6 +345,34 @@ double total_distance(){
 
 
 
+/********************************************************************/
+int main(void)
+{
+    double distance ;
+    //Initializing all required ports
+    Init_Port_F () ;
+    lcd_init();
+    UART2_Init();
+
+
+
+               lcd_cmd(0x30);
+
+               milli_delay(10);
+               lcd_cmd(0x38);  //8-bit mode, 2 line display mode, 5x8 dots display mode
+               milli_delay(40);
+               lcd_cmd(0x01);  //clear display
+               milli_delay(40);
+               lcd_cmd(0x0F);  //display On
+               milli_delay(40);
+               lcd_cmd(0x80);  //First line
+
+
+               milli_delay(7000) ;//Delay until the gps works correctly
+               distance = total_distance(); //prints and calculates the distance constantly and turns led on
+               lcd_cmd(0xc0);//Second Line
+               display("Target reached");
+}
 
 
 
