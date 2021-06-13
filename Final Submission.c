@@ -55,5 +55,28 @@ unsigned char read() { //reads data from UART
     return (unsigned char)(UART2_DR_R & 0xFF) ;
 }
 
+/*the following functions are responsible for converting the latitude and longitude format into double values and
+ changing the degrees and decimal minutes to only degrees
+ */
 
+
+double get_lat(char lat[]) {
+    char *ptr;
+    double latitude = strtod(lat , &ptr) ;
+    double part1 = (int)latitude/100 ;
+    double part2 = (latitude/100 - part1)*100 ;
+    part2/=60 ;
+    return part1+part2 ;
+}
+
+
+
+double get_lon(char lon[]) {
+    char *ptr;
+    double longitude = strtod(lon , &ptr) ;
+    double part1 = (int)(longitude/100) ;
+    double part2 = (longitude/100- part1)*100 ;
+    part2/=60 ;
+    return part1+part2 ;
+}
 
